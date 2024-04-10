@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient_color">
+
+    <TextView
+        android:id="@+id/tv4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:text="Welcome back!"
+        android:textSize="45sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.002"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/left_32px" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="350dp"
+        android:layout_height="280dp"
+        android:background="@drawable/custom_button"
+        android:backgroundTint="@color/white"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.376">
+
+        <EditText
+            android:id="@+id/user_name_bar"
+            android:layout_width="300dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:alpha="0.7"
+            android:background="@drawable/custom_button"
+            android:backgroundTint="@color/material_dynamic_neutral40"
+            android:drawableLeft="@drawable/customer_28px"
+            android:padding="10dp"
+            android:hint="  Username or Email"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/password_bar"
+            android:layout_width="300dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
+            android:alpha="0.7"
+            android:background="@drawable/custom_button"
+            android:backgroundTint="@color/material_dynamic_neutral40"
+            android:drawableLeft="@drawable/lock_28px"
+            android:drawableRight="@drawable/eye_28px"
+            android:padding="10dp"
+            android:hint="  Password"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="120dp"
+            android:layout_height="25dp"
+            android:layout_gravity="right"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:text="Forgot Password?"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="150dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="50dp"
+            android:background="@drawable/custom_button"
+            android:backgroundTint="@color/green"
+            android:text="Log in"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="299dp"
+        android:layout_height="277dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout2"
+        app:layout_constraintVertical_bias="0.996"
+        app:srcCompat="@drawable/travel" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

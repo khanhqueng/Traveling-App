@@ -1,0 +1,10 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.UDDD" parent="Theme.Design.Light.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">#58A399</item>
+
+    </style>
+
+    <style name="Theme.UDDD" parent="Base.Theme.UDDD" />
+</resources>
