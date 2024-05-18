@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity {
 
+
     private TextView titleTxt, locationTxt,descriptionTxt, scoreTxt;
     private PopularDomain item;
     private ImageView picImg;

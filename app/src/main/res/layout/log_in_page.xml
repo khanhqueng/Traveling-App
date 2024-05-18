@@ -2,9 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient_color">
+    android:background="@drawable/background_gradient_color"
+    tools:context=".Activities.LoginActivity">
 
     <TextView
         android:id="@+id/tv4"
@@ -18,17 +20,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/btn_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:backgroundTint="@android:color/transparent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.002"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/left_32px" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -114,5 +105,18 @@
         app:layout_constraintTop_toTopOf="@+id/linearLayout2"
         app:layout_constraintVertical_bias="0.996"
         app:srcCompat="@drawable/travel" />
+
+    <ImageButton
+        android:id="@+id/back"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.084"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:viewBindingType="android.widget.ImageButton"
+        app:srcCompat="@drawable/left_32px"
+        android:scaleType="fitCenter"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
