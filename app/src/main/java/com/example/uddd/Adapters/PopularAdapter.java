@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -17,7 +20,6 @@ import com.example.uddd.Activities.DetailActivity;
 import com.example.uddd.Domains.PopularDomain;
 import com.example.uddd.R;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHolder> {
@@ -42,9 +44,8 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHold
         int drawableResId = holder.itemView.getResources().getIdentifier(items.get(position).getPic(), "drawable", holder.itemView.getContext().getPackageName());
         Glide.with(holder.itemView.getContext())
                 .load(drawableResId)
-                .transform(new CenterCrop())
+                .transform(new CenterCrop(), new GranularRoundedCorners(30, 30 , 30, 30))
                 .into(holder.pic);
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,12 +64,23 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView titleTxt, locationTxt, scoreTxt;
         ImageView pic;
+        ToggleButton likeButton;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTxt = itemView.findViewById(R.id.titleTxt);
             locationTxt = itemView.findViewById(R.id.locationTxt);
             scoreTxt = itemView.findViewById(R.id.scoreTxt);
             pic = itemView.findViewById(R.id.picImg);
+            likeButton = itemView.findViewById(R.id.btn_like);
+            likeButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked)
+                        likeButton.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(itemView.getContext(), R.drawable.love_20px), null);
+                    else
+                        likeButton.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(itemView.getContext(), R.drawable.favorite_20px), null);
+                }
+            });
         }
     }
 }

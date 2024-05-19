@@ -8,4 +8,5 @@
     <color name="yellow">#E2F4C5</color>
     <color name="gray">#ADADAD</color>
     <color name="gray_blue">#E6E6E6</color>
+    <color name="highlight_blue">#000FFF</color>
 </resources>

@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/picImg"
-            android:layout_width="147dp"
-            android:layout_height="136dp"
+            android:layout_width="160dp"
+            android:layout_height="140dp"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:singleLine="true"
             android:text="Title"
             android:textColor="@color/black"
@@ -43,22 +43,26 @@
         <TextView
             android:id="@+id/locationTxt"
             android:layout_width="194dp"
-            android:gravity="center|left"
             android:layout_height="23dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="36dp"
             android:drawableStart="@drawable/location_20px"
-            android:textColor="@color/black"
+            android:gravity="center|left"
             android:text="Location"
+            android:textColor="@color/black"
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/picImg"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
+        <ToggleButton
             android:id="@+id/btn_like"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:background="@drawable/outline_circle"
+            android:drawableStart="@drawable/favorite_20px"
+            android:padding ="5dp"
+            android:textOn=" "
+            android:textOff=" "
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/favorite_20px" />

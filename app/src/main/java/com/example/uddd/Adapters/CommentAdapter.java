@@ -39,7 +39,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         holder.dateTxt.setText(items.get(position).getDate());
         holder.num_like.setText(Integer.toString(items.get(position).getAgree()));
         holder.num_dislike.setText(Integer.toString(items.get(position).getDisagree()));
-
         holder.score_bar.setRating(items.get(position).getScore());
 
         int drawableResId = holder.itemView.getResources().getIdentifier(items.get(position).getPic(), "drawable", holder.itemView.getContext().getPackageName());
@@ -48,10 +47,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                 .transform(new FitCenter())
                 .into(holder.avatar);
     }
-
     @Override
     public int getItemCount() {
         return items.size();
+    }
+    public void addItem(CommentDomain item)
+    {
+        items.add(item);
+        notifyItemInserted(items.size()-1);
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView username, commentTxt, dateTxt ,num_like, num_dislike;

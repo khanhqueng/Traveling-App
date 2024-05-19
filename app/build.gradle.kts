@@ -37,8 +37,9 @@ android {
 }
 
 dependencies {
-
     implementation("com.github.bumptech.glide:glide:4.12.0")
+    implementation("com.mapbox.search:place-autocomplete:1.2.0")
+    implementation("com.mapbox.search:mapbox-search-android-ui:1.0.0-rc.6")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -51,5 +52,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
 }
