@@ -21,7 +21,6 @@ public class ResultActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ImageButton backButton;
     private String searchLocation;
-    private TextView test;
     private ArrayList<ToggleButton> filters;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +64,8 @@ public class ResultActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(resultAdapter);
 
-        test = findViewById(R.id.test_tv);
-        test.setText(searchLocation);
+        //test = findViewById(R.id.test_tv);
+        ///test.setText(searchLocation);
     }
 
     public void getResultInfo()

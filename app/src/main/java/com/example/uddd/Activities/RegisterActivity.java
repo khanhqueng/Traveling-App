@@ -1,12 +1,15 @@
 package com.example.uddd.Activities;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -27,6 +30,7 @@ public class RegisterActivity extends AppCompatActivity {
     ImageButton backButton, showButton1,showButton2;
     EditText nameBar,usernameBar,passwordBar,confirmBar;
     Button singupButton;
+    TextView dobBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +40,20 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        dobBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(RegisterActivity.this);
+                datePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        month++;
+                        dobBar.setText(" "+dayOfMonth+"/"+month+"/"+year);
+                    }
+                });
+                datePickerDialog.show();
             }
         });
         showButton1.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +80,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String name = nameBar.getText().toString();
                 String username = usernameBar.getText().toString();
                 String password = passwordBar.getText().toString();
+                String dob = dobBar.toString().trim();
 
                 if(!checkValidName(name)||!checkValidUsername(username)||!checkValidPassword())
                     return;
@@ -146,5 +165,6 @@ public class RegisterActivity extends AppCompatActivity {
         singupButton = findViewById(R.id.btn_signup);
         showButton1 = findViewById(R.id.btn_show1);
         showButton2 = findViewById(R.id.btn_show2);
+        dobBar = findViewById(R.id.dob_bar);
     }
 }

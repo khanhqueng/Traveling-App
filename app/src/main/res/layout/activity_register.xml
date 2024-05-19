@@ -33,7 +33,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.046" />
+        app:layout_constraintVertical_bias="0.055" />
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -44,10 +44,9 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.524"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.326">
+        app:layout_constraintTop_toTopOf="parent">
 
         <EditText
             android:id="@+id/name_bar"
@@ -66,6 +65,24 @@
             android:textColorHint="@color/white"
             android:textSize="13sp" />
 
+        <TextView
+            android:id="@+id/dob_bar"
+            android:layout_width="300dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="25dp"
+            android:alpha="0.7"
+            android:background="@drawable/custom_button"
+            android:backgroundTint="@color/material_dynamic_neutral40"
+            android:drawableLeft="@drawable/calendar_28px"
+            android:gravity="center_vertical"
+            android:inputType="text"
+            android:padding="10dp"
+            android:text="  Date of birth"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="13sp" />
+
         <EditText
             android:id="@+id/user_name_bar"
             android:layout_width="300dp"
@@ -73,11 +90,11 @@
             android:layout_gravity="center"
             android:layout_marginTop="25dp"
             android:alpha="0.7"
-            android:inputType="textEmailAddress"
             android:background="@drawable/custom_button"
             android:backgroundTint="@color/material_dynamic_neutral40"
             android:drawableLeft="@drawable/customer_28px"
             android:hint="  Username or Email"
+            android:inputType="textEmailAddress"
             android:padding="10dp"
             android:textColor="@color/white"
             android:textColorHint="@color/white"
@@ -135,9 +152,10 @@
                 android:alpha="0.7"
                 android:background="@drawable/custom_button"
                 android:backgroundTint="@color/material_dynamic_neutral40"
+                android:drawableLeft="@drawable/lock_28px"
                 android:hint="  Confirm Password"
                 android:inputType="textPassword"
-                android:paddingStart="38dp"
+                android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
@@ -181,17 +199,5 @@
             android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="370dp"
-        android:layout_height="219dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout3"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/tropical" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

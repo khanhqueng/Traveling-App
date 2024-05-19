@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
+    alias(libs.plugins.jetbrainsKotlinAndroid) apply false
 }
 
 android {
@@ -14,6 +15,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     buildTypes {
@@ -24,6 +29,9 @@ android {
                 "proguard-rules.pro"
             )
         }
+        composeOptions {
+            kotlinCompilerExtensionVersion = "1.5.0"
+        }
     }
 
     compileOptions {
@@ -33,11 +41,17 @@ android {
 
     buildFeatures{
         viewBinding = true
+        compose = true
     }
+    //kotlinOptions {
+        //jvmTarget = "1.8"
+    //}
 }
+
 
 dependencies {
     implementation("com.github.bumptech.glide:glide:4.12.0")
+    implementation("com.mapbox.maps:android:11.3.1")
     implementation("com.mapbox.search:place-autocomplete:1.2.0")
     implementation("com.mapbox.search:mapbox-search-android-ui:1.0.0-rc.6")
     implementation(libs.appcompat)
@@ -52,4 +66,22 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    implementation("androidx.core:core-ktx:+")
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.activity.compose)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.material3)
+    implementation(libs.play.services.location)
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.google.code.gson:gson:2.6.2")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.ui.test.junit4)
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
 }

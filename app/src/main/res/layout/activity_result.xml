@@ -8,6 +8,20 @@
     android:background="@drawable/background_gradient_color"
     tools:context=".Activities.ResultActivity">
 
+    <com.mapbox.maps.MapView
+        android:layout_width="match_parent"
+        android:layout_height="222dp"
+        app:mapbox_cameraBearing="0.0"
+        app:mapbox_cameraPitch="0.0"
+        app:mapbox_cameraTargetLat="39.5"
+        app:mapbox_cameraTargetLng="-98.0"
+        app:mapbox_cameraZoom="2.0"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </com.mapbox.maps.MapView>
+
     <ImageButton
         android:id="@+id/btn_back"
         android:layout_width="40dp"
@@ -19,19 +33,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/left_32px" />
 
-    <TextView
-        android:id="@+id/test_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
-        android:textSize="20sp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.526"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <LinearLayout
+        android:id="@+id/linearLayout6"
         android:layout_width="match_parent"
         android:layout_height="520dp"
         android:layout_marginBottom="-12dp"
@@ -48,9 +51,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:paddingStart="20dp"
+            android:text="Filters"
             android:textSize="26sp"
-            android:textStyle="bold"
-            android:text="Filters" />
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/panel_button"
@@ -121,20 +124,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:orientation="horizontal"
             android:paddingStart="5dp"
-            android:paddingEnd="15dp"
-            android:orientation="horizontal">
+            android:paddingEnd="15dp">
 
             <ToggleButton
                 android:id="@+id/filter5"
                 android:layout_width="140dp"
                 android:layout_height="40dp"
+                android:layout_marginStart="15dp"
                 android:background="@drawable/outline_shape"
                 android:drawableStart="@drawable/circus_20px"
                 android:elevation="6dp"
                 android:gravity="center"
                 android:padding="4dp"
-                android:layout_marginStart="15dp"
                 android:textAllCaps="false"
                 android:textOff="Entertainment"
                 android:textOn="Entertainment"

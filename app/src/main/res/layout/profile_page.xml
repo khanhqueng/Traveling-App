@@ -237,7 +237,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"
                 android:layout_marginStart="50dp"
-                android:text="Accuracy"
+                android:text="Reliability"
                 android:textSize="20sp" />
         </LinearLayout>
 
