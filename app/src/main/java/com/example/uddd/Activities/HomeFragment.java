@@ -3,31 +3,25 @@ package com.example.uddd.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.uddd.Adapters.PopularAdapter;
 import com.example.uddd.Adapters.ResultAdapter;
 import com.example.uddd.Domains.PopularDomain;
 import com.example.uddd.R;
-import com.mapbox.android.core.location.LocationEngineProvider;
 import com.mapbox.search.autocomplete.PlaceAutocomplete;
 import com.mapbox.search.autocomplete.PlaceAutocompleteSuggestion;
 import com.mapbox.search.ui.adapter.autocomplete.PlaceAutocompleteUiAdapter;
@@ -70,91 +64,91 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         recyclerView.setAdapter(popularAdapter);
 
-//        PlaceAutocomplete placeAutocomplete = PlaceAutocomplete.create(getString(R.string.mapbox_access_token));
-//        searchBar = view.findViewById(R.id.search_bar);
-//        searchResultsView = view.findViewById(R.id.result_view);
-//
-//        searchResultsView.initialize(new SearchResultsView.Configuration(new CommonSearchViewConfiguration()));
-//        placeAutocompleteUiAdapter = new PlaceAutocompleteUiAdapter(searchResultsView,placeAutocomplete, LocationEngineProvider.getBestLocationEngine(getContext()));
-//
-//        searchBar.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//                if(ignoreNextQueryUpdate)
-//                {
-//                    ignoreNextQueryUpdate = false;
-//                    return;
-//                }
-//                placeAutocompleteUiAdapter.search(s.toString(), new Continuation<Unit>() {
-//                    @NonNull
-//                    @Override
-//                    public CoroutineContext getContext() {
-//                        return EmptyCoroutineContext.INSTANCE;
-//                    }
-//                    @Override
-//                    public void resumeWith(@NonNull Object o) {
-//                        getActivity().runOnUiThread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                if(!searchResultsView.getAdapterItems().isEmpty() && !ignoreNextQueryUpdate)
-//                                    searchResultsView.setVisibility(View.VISIBLE);
-//                                else
-//                                    searchResultsView.setVisibility(View.GONE);
-//                            }
-//                        });
-//                    }
-//                });
-//            }
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
-//
-//        searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//        @Override
-//        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//            if (searchBar.length() > 0 && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
-//            {
-//                confirmLocation();
-//                return true; // Consume the event
-//            }
-//            return false; // Let system handle the event
-//        }
-//    });
-//
-//        placeAutocompleteUiAdapter.addSearchListener(new PlaceAutocompleteUiAdapter.SearchListener() {
-//            @Override
-//            public void onSuggestionsShown(@NonNull List<PlaceAutocompleteSuggestion> list) {
-//
-//            }
-//
-//            @Override
-//            public void onSuggestionSelected(@NonNull PlaceAutocompleteSuggestion placeAutocompleteSuggestion) {
-//                searchBar.setText(placeAutocompleteSuggestion.getName());
-//                confirmLocation();
-//            }
-//
-//            @Override
-//            public void onPopulateQueryClick(@NonNull PlaceAutocompleteSuggestion placeAutocompleteSuggestion) {
-//
-//            }
-//            @Override
-//            public void onError(@NonNull Exception e) {
-//
-//            }
-//        });
-//
-//        searchBar.setOnFocusChangeListener((v, hasFocus) -> {
-//            if(!hasFocus)
-//                searchResultsView.setVisibility(View.GONE);
-//        });
+        searchBar = view.findViewById(R.id.search_bar);
+        PlaceAutocomplete placeAutocomplete = PlaceAutocomplete.create();
+        searchResultsView = view.findViewById(R.id.result_view);
+
+        searchResultsView.initialize(new SearchResultsView.Configuration(new CommonSearchViewConfiguration()));
+        placeAutocompleteUiAdapter = new PlaceAutocompleteUiAdapter(searchResultsView,placeAutocomplete);
+
+        searchBar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(ignoreNextQueryUpdate)
+                {
+                    ignoreNextQueryUpdate = false;
+                    return;
+                }
+                placeAutocompleteUiAdapter.search(s.toString(), new Continuation<Unit>() {
+                    @NonNull
+                    @Override
+                    public CoroutineContext getContext() {
+                        return EmptyCoroutineContext.INSTANCE;
+                    }
+                    @Override
+                    public void resumeWith(@NonNull Object o) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(!searchResultsView.getAdapterItems().isEmpty() && !ignoreNextQueryUpdate)
+                                    searchResultsView.setVisibility(View.VISIBLE);
+                                else
+                                    searchResultsView.setVisibility(View.GONE);
+                            }
+                        });
+                    }
+                });
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (searchBar.length() > 0 && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
+            {
+                confirmLocation();
+                return true; // Consume the event
+            }
+            return false; // Let system handle the event
+        }
+    });
+
+        placeAutocompleteUiAdapter.addSearchListener(new PlaceAutocompleteUiAdapter.SearchListener() {
+            @Override
+            public void onSuggestionsShown(@NonNull List<PlaceAutocompleteSuggestion> list) {
+
+            }
+
+            @Override
+            public void onSuggestionSelected(@NonNull PlaceAutocompleteSuggestion placeAutocompleteSuggestion) {
+                searchBar.setText(placeAutocompleteSuggestion.getName());
+                confirmLocation();
+            }
+
+            @Override
+            public void onPopulateQueryClick(@NonNull PlaceAutocompleteSuggestion placeAutocompleteSuggestion) {
+
+            }
+            @Override
+            public void onError(@NonNull Exception e) {
+
+            }
+        });
+
+        searchBar.setOnFocusChangeListener((v, hasFocus) -> {
+            if(!hasFocus)
+                searchResultsView.setVisibility(View.GONE);
+        });
 
         return view;
     }
@@ -169,7 +163,7 @@ public class HomeFragment extends Fragment {
     public void confirmLocation()
     {
         ignoreNextQueryUpdate = true;
-        searchResultsView.setVisibility(View.GONE);
+//        searchResultsView.setVisibility(View.GONE);
 
         // Hide the keyboard
         InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);

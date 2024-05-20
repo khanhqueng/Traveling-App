@@ -9,8 +9,9 @@
     tools:context=".Activities.ResultActivity">
 
     <com.mapbox.maps.MapView
+        android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="222dp"
+        android:layout_height="232dp"
         app:mapbox_cameraBearing="0.0"
         app:mapbox_cameraPitch="0.0"
         app:mapbox_cameraTargetLat="39.5"
@@ -19,19 +20,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@android:color/transparent"
+            app:srcCompat="@drawable/left_32px" />
     </com.mapbox.maps.MapView>
-
-    <ImageButton
-        android:id="@+id/btn_back"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
-        android:backgroundTint="@android:color/transparent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/left_32px" />
 
     <LinearLayout
         android:id="@+id/linearLayout6"

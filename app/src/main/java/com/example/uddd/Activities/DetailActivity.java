@@ -18,9 +18,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,7 +33,6 @@ import java.util.Date;
 import java.util.Locale;
 
 public class DetailActivity extends AppCompatActivity {
-
     private TextView titleTxt, locationTxt,descriptionTxt, scoreTxt;
     private PopularDomain item;
     private ImageView picImg;
@@ -49,7 +45,6 @@ public class DetailActivity extends AppCompatActivity {
     private Button commentButton,cancelButton;
     private EditText comment;
     private RatingBar ratingBar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,14 +127,12 @@ public class DetailActivity extends AppCompatActivity {
         items.add(new CommentDomain("Anna Watson","Regular beach",5,10,0,"15/9/2023","avatar"));
         adapter = new CommentAdapter(items);
     }
-
     public void InitCommentView()
     {
         recyclerView =  findViewById(R.id.view_comment);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         recyclerView.setAdapter(adapter);
     }
-
     private void setVariable()
     {
         item = (PopularDomain) getIntent().getSerializableExtra("object");

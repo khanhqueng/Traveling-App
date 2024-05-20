@@ -1,4 +1,3 @@
-
 pluginManagement {
     repositories {
         google {
@@ -28,6 +27,7 @@ dependencyResolutionManagement {
 
     }
 }
+
 rootProject.name = "UDDD"
 include(":app")
  

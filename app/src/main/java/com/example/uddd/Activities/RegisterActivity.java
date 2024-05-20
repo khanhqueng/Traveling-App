@@ -10,20 +10,16 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import androidx.activity.EdgeToEdge;
+import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import com.example.uddd.Domains.CommentDomain;
+import com.example.uddd.API.RetrofitClient;
 import com.example.uddd.R;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.io.IOException;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -86,6 +82,25 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
 
                 //Handle register
+                Call<ResponseBody> call = RetrofitClient.getInstance().getAPI().createUser(name, username, password);
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        try{
+                            String info= response.body().string();
+                            Toast.makeText(RegisterActivity.this,info,Toast.LENGTH_LONG).show();
+
+                        }catch(IOException e){
+                            e.printStackTrace();
+
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Toast.makeText(RegisterActivity.this,"Failed to sign up",Toast.LENGTH_LONG).show();
+
+                    }
+                });
             }
         });
     }

@@ -8,14 +8,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
-import androidx.activity.EdgeToEdge;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import com.example.uddd.R;
+import com.example.uddd.API.RetrofitClient;
+import com.example.uddd.Models.User;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -43,14 +43,14 @@ public class LoginActivity extends AppCompatActivity {
         forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this,ForgotPasswordActivity.class);
+                Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
                 startActivity(intent);
             }
         });
         showButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(passwordBar.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD)
+                if (passwordBar.getInputType() == InputType.TYPE_TEXT_VARIATION_PASSWORD)
                     passwordBar.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                 else
                     passwordBar.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
@@ -59,12 +59,24 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = usernameBar.getText().toString();
-                String password = passwordBar.getText().toString();
+                String userEmail = usernameBar.getText().toString();
+                String userPass = passwordBar.getText().toString();
 
                 //Handle login
+                Call<User> call = RetrofitClient.getInstance().getAPI().LoginUser(userEmail,userPass);
+                call.enqueue(new Callback<User>(){
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        Toast.makeText(LoginActivity.this, response.body().getEmail(), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+                        Toast.makeText(LoginActivity.this,t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
-
     }
 }

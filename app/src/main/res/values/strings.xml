@@ -2,6 +2,14 @@
     <string name="app_name">UDDD</string>
     <string name="custom_string">By clicking the <b><font color="#58A399">Sign up</font></b> button, you agree to the public offer</string>
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="Mapbox_key">pk.eyJ1Ijoic2VhcmNoLW1hY2hpbmUtdXNlci0xIiwiYSI6ImNrNnJ6bDdzdzA5cnAza3F4aTVwcWxqdWEifQ.RFF7CVFKrUsZVrJsFzhRvQ</string>
     <string name="API_key">AIzaSyBMO8xHl-IaDikDQJ47xbTHsVpzDOJMFP4</string>
     <string name="mapbox_access_token" translatable="false">pk.eyJ1Ijoibmd1eWV0bHVuMTE1IiwiYSI6ImNsdzNzdHUzbzB4MjMybnF6ZG1vZHRiZ2wifQ.7fe6wqihyj7UumXdU1dUWQ</string>
 </resources>
