@@ -27,7 +27,35 @@ public interface api {
 
     );
     @GET("/search/searchbox/v1/category/coffee")
-    Call<PlacesInfo> GetNearby(
+    Call<PlacesInfo> GetNearbyCoffee(
+            @Query("access_token") String access_token,
+            @Query("language") String language,
+            @Query("limit") int limit,
+            @Query("proximity") String proximity
+    );
+    @GET("/search/searchbox/v1/category/restaurant")
+    Call<PlacesInfo> GetNearbyRestaurant(
+            @Query("access_token") String access_token,
+            @Query("language") String language,
+            @Query("limit") int limit,
+            @Query("proximity") String proximity
+    );
+    @GET("/search/searchbox/v1/category/food_and_drink")
+    Call<PlacesInfo> GetNearbyFoodAndDrink(
+            @Query("access_token") String access_token,
+            @Query("language") String language,
+            @Query("limit") int limit,
+            @Query("proximity") String proximity
+    );
+    @GET("/search/searchbox/v1/category/shopping")
+    Call<PlacesInfo> GetNearbyShop(
+            @Query("access_token") String access_token,
+            @Query("language") String language,
+            @Query("limit") int limit,
+            @Query("proximity") String proximity
+    );
+    @GET("/search/searchbox/v1/category/hotel")
+    Call<PlacesInfo> GetNearbyHotel(
             @Query("access_token") String access_token,
             @Query("language") String language,
             @Query("limit") int limit,

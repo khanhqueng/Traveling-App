@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -71,6 +71,7 @@ public class HomeFragment extends Fragment {
         searchResultsView.initialize(new SearchResultsView.Configuration(new CommonSearchViewConfiguration()));
         placeAutocompleteUiAdapter = new PlaceAutocompleteUiAdapter(searchResultsView,placeAutocomplete);
 
+
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -80,30 +81,31 @@ public class HomeFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if(ignoreNextQueryUpdate)
-                {
+                if (ignoreNextQueryUpdate) {
                     ignoreNextQueryUpdate = false;
-                    return;
+
+                } else {
+                    placeAutocompleteUiAdapter.search(s.toString(), new Continuation<Unit>() {
+                        @NonNull
+                        @Override
+                        public CoroutineContext getContext() {
+                            return EmptyCoroutineContext.INSTANCE;
+                        }
+
+                        @Override
+                        public void resumeWith(@NonNull Object o) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (!searchResultsView.getAdapterItems().isEmpty() && !ignoreNextQueryUpdate)
+                                        searchResultsView.setVisibility(View.VISIBLE);
+                                    else
+                                        searchResultsView.setVisibility(View.GONE);
+                                }
+                            });
+                        }
+                    });
                 }
-                placeAutocompleteUiAdapter.search(s.toString(), new Continuation<Unit>() {
-                    @NonNull
-                    @Override
-                    public CoroutineContext getContext() {
-                        return EmptyCoroutineContext.INSTANCE;
-                    }
-                    @Override
-                    public void resumeWith(@NonNull Object o) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(!searchResultsView.getAdapterItems().isEmpty() && !ignoreNextQueryUpdate)
-                                    searchResultsView.setVisibility(View.VISIBLE);
-                                else
-                                    searchResultsView.setVisibility(View.GONE);
-                            }
-                        });
-                    }
-                });
             }
             @Override
             public void afterTextChanged(Editable s) {
@@ -131,8 +133,12 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onSuggestionSelected(@NonNull PlaceAutocompleteSuggestion placeAutocompleteSuggestion) {
+                ignoreNextQueryUpdate=true;
+
                 searchBar.setText(placeAutocompleteSuggestion.getName());
+
                 confirmLocation();
+
             }
 
             @Override
