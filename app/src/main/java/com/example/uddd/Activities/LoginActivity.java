@@ -67,8 +67,14 @@ public class LoginActivity extends AppCompatActivity {
                 call.enqueue(new Callback<User>(){
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
-                        Toast.makeText(LoginActivity.this, response.body().getEmail(), Toast.LENGTH_SHORT).show();
+
+                        String email = response.body().getEmail();
+                        //check if user exist if not show error
+                        Toast.makeText(LoginActivity.this, "Hello", Toast.LENGTH_SHORT).show();
+
+                        //Give userID to home page
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("userID",response.body().getId());
                         startActivity(intent);
                     }
                     @Override

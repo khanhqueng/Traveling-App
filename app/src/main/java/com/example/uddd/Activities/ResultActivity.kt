@@ -27,6 +27,7 @@ import com.example.uddd.R
 import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
+
 import com.mapbox.maps.ImageHolder
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
@@ -118,16 +119,16 @@ class ResultActivity : AppCompatActivity()
             val filterId = getResources().getIdentifier("filter" + (i + 1), "id", packageName)
             val button = findViewById<ToggleButton>(filterId)
             button.setOnCheckedChangeListener { buttonView, isChecked ->
+                //Separate later for each filter
                 if (isChecked) {
                     button.setBackgroundDrawable(getDrawable(R.drawable.gradient_green_button))
 
                     val key = getString(R.string.Mapbox_key)
                     val call =
-                        RetrofitMapbox.getInstance().api.GetNearby(key, "en", 10, "106.7004,10.7757")
+                        RetrofitMapbox.getInstance().api.GetNearby(key, "en", 10, searchLocation)
                     call.enqueue(object : Callback<PlacesInfo?> {
                         override fun onResponse(call: Call<PlacesInfo?>, response: Response<PlacesInfo?>) {
                             val info = response.body()
-                            var string: String =""
                             annotationapi= Map?.annotations
                             annotationConfig= AnnotationConfig(
                                 layerId = layIDD
@@ -136,18 +137,11 @@ class ResultActivity : AppCompatActivity()
                             for (i in info!!.features.indices) {
                                 val longitude = info.features[i].properties.coordinates.longitude
                                 val latitude = info.features[i].properties.coordinates.latitude
-                                string +=longitude.toString() + ","+latitude.toString()
-
 
                                 val bitmap = convertDrawToBitmap(AppCompatResources.getDrawable(this@ResultActivity,R.drawable.baseline_location_on_24))
                                 val pointAnnotationOptions:PointAnnotationOptions=PointAnnotationOptions().withPoint(
                                     Point.fromLngLat(longitude, latitude)).withIconImage(bitmap)
                                 markerlist.add(pointAnnotationOptions)
-
-
-
-
-
 
 
                             }

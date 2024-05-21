@@ -7,8 +7,6 @@ public class User {
     private String Password;
 
 
-
-
     public User(int Id, String hoten, String email, String password) {
         id = Id;
         Hoten = hoten;

@@ -2,6 +2,7 @@ package com.example.uddd.Activities;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -11,12 +12,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.uddd.API.RetrofitClient;
+import com.example.uddd.Models.User;
 import com.example.uddd.R;
-import java.io.IOException;
-import okhttp3.ResponseBody;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -82,21 +85,21 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
 
                 //Handle register
-                Call<ResponseBody> call = RetrofitClient.getInstance().getAPI().createUser(name, username, password);
-                call.enqueue(new Callback<ResponseBody>() {
+                Call<User> call = RetrofitClient.getInstance().getAPI().createUser(name, username, password);
+                call.enqueue(new Callback<User>() {
                     @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try{
-                            String info= response.body().string();
-                            Toast.makeText(RegisterActivity.this,info,Toast.LENGTH_LONG).show();
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        int info= response.body().getId();
+                        Toast.makeText(RegisterActivity.this,info,Toast.LENGTH_LONG).show();
 
-                        }catch(IOException e){
-                            e.printStackTrace();
+                        //Give userID to home page
+                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                        //intent.putExtra("userID",response.body().g);
+                        startActivity(intent);
 
-                        }
                     }
                     @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    public void onFailure(Call<User> call, Throwable t) {
                         Toast.makeText(RegisterActivity.this,"Failed to sign up",Toast.LENGTH_LONG).show();
 
                     }
