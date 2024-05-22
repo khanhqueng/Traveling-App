@@ -3,20 +3,49 @@ package com.example.uddd.Domains;
 import java.io.Serializable;
 
 public class CommentDomain implements Serializable {
-    private String username;
-    private String comment;
-    private float score;
-    private int agree;
-    private int disagree;
-    private String date;
-    private String pic;
+    public int id;
+    public int userID;
+    public int locationID;
+    public String date;
+    public float numStar;
 
-    public String getPic() {
-        return pic;
+    public String content;
+    public int likes;
+    public int dislikes;
+
+    public CommentDomain(int id, int userID, int locationID, String date, float numStar, String content, int likes, int dislikes) {
+        this.id = id;
+        this.userID = userID;
+        this.locationID = locationID;
+        this.date = date;
+        this.numStar = numStar;
+        this.content = content;
+        this.likes = likes;
+        this.dislikes = dislikes;
     }
 
-    public void setPic(String pic) {
-        this.pic = pic;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public int getLocationID() {
+        return locationID;
+    }
+
+    public void setLocationID(int locationID) {
+        this.locationID = locationID;
     }
 
     public String getDate() {
@@ -27,53 +56,35 @@ public class CommentDomain implements Serializable {
         this.date = date;
     }
 
-    public String getUsername() {
-        return username;
+    public float getNumStar() {
+        return numStar;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setNumStar(int numStar) {
+        this.numStar = numStar;
     }
 
-    public String getComment() {
-        return comment;
+    public String getContent() {
+        return content;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public float getScore() {
-        return score;
+    public int getLikes() {
+        return likes;
     }
 
-    public void setScore(float score) {
-        this.score = score;
+    public void setLikes(int likes) {
+        this.likes = likes;
     }
 
-    public int getAgree() {
-        return agree;
+    public int getDislikes() {
+        return dislikes;
     }
 
-    public void setAgree(int agree) {
-        this.agree = agree;
-    }
-
-    public int getDisagree() {
-        return disagree;
-    }
-
-    public void setDisagree(int disagree) {
-        this.disagree = disagree;
-    }
-
-    public CommentDomain(String username, String comment, float score, int agree, int disagree, String date, String pic) {
-        this.username = username;
-        this.comment = comment;
-        this.score = score;
-        this.agree = agree;
-        this.disagree = disagree;
-        this.date = date;
-        this.pic = pic;
+    public void setDislikes(int dislikes) {
+        this.dislikes = dislikes;
     }
 }

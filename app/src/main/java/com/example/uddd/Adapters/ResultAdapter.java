@@ -1,6 +1,7 @@
 package com.example.uddd.Adapters;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import com.example.uddd.Activities.DetailActivity;
 import com.example.uddd.Domains.PopularDomain;
 import com.example.uddd.R;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder> {
@@ -37,9 +40,14 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ResultAdapter.ViewHolder holder, int position) {
-        holder.titleTxt.setText(items.get(position).getTitle());
-        holder.locationTxt.setText(items.get(position).getLocation());
-        holder.scoreTxt.setText(Float.toString(items.get(position).getScore()));
+        holder.titleTxt.setText(items.get(position).getName());
+        holder.locationTxt.setText(items.get(position).getAddress());
+        DecimalFormat df = new DecimalFormat("#.#");
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        String roundedValue = df.format(items.get(position).getAvgStar());
+        holder.scoreTxt.setText(roundedValue);
+        holder.descriptionTxt.setText(items.get(position).getDescription());
+        holder.totalComment.setText("("+items.get(position).getTotalComment()+")");
         holder.likeButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -50,7 +58,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
             }
         });
 
-        int drawableResId = holder.itemView.getResources().getIdentifier(items.get(position).getPic(), "drawable", holder.itemView.getContext().getPackageName());
+        int drawableResId = holder.itemView.getResources().getIdentifier(items.get(position).getPhoto(), "drawable", holder.itemView.getContext().getPackageName());
         Glide.with(holder.itemView.getContext())
                 .load(drawableResId)
                 .transform(new CenterCrop(), new GranularRoundedCorners(30,30, 30, 30))
@@ -72,7 +80,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView titleTxt, locationTxt, scoreTxt;
+        TextView titleTxt, locationTxt, scoreTxt, descriptionTxt, totalComment;
         ImageView pic;
         ToggleButton likeButton;
         public ViewHolder(@NonNull View itemView) {
@@ -80,6 +88,8 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
             titleTxt = itemView.findViewById(R.id.titleTxt);
             locationTxt = itemView.findViewById(R.id.locationTxt);
             scoreTxt = itemView.findViewById(R.id.scoreTxt);
+            descriptionTxt = itemView.findViewById(R.id.descriptionTxt);
+            totalComment = itemView.findViewById(R.id.numOfValuateTxt);
             pic = itemView.findViewById(R.id.picImg);
             likeButton = itemView.findViewById(R.id.btn_like);
         }

@@ -31,7 +31,6 @@ public class IntroActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(IntroActivity.this,RegisterActivity.class);
                 startActivity(intent);
-
             }
         });
         continueLabel.setOnClickListener(new View.OnClickListener() {
@@ -39,6 +38,7 @@ public class IntroActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(IntroActivity.this,MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

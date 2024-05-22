@@ -25,7 +25,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
-
     ImageButton backButton, showButton1,showButton2;
     EditText nameBar,usernameBar,passwordBar,confirmBar;
     Button singupButton;
@@ -79,28 +78,35 @@ public class RegisterActivity extends AppCompatActivity {
                 String name = nameBar.getText().toString();
                 String username = usernameBar.getText().toString();
                 String password = passwordBar.getText().toString();
-                String dob = dobBar.toString().trim();
+                String dob = dobBar.getText().toString().trim();
 
                 if(!checkValidName(name)||!checkValidUsername(username)||!checkValidPassword())
                     return;
 
                 //Handle register
-                Call<User> call = RetrofitClient.getInstance().getAPI().createUser(name, username, password);
+                Call<User> call = RetrofitClient.getInstance().getAPI().createUser(name,dob, username, password);
                 call.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
-                        int info= response.body().getId();
-                        Toast.makeText(RegisterActivity.this,info,Toast.LENGTH_LONG).show();
 
-                        //Give userID to home page
-                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                        //intent.putExtra("userID",response.body().g);
-                        startActivity(intent);
+                        if(response.body() != null)
+                        {
+                            Toast.makeText(RegisterActivity.this,"Register successful",Toast.LENGTH_LONG).show();
+                            int userID = response.body().getUserID();
+
+                            //Give userID to home page
+                            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                            intent.putExtra("userID",userID);
+                            startActivity(intent);
+                            finish();
+                        }
+                        else
+                            Toast.makeText(RegisterActivity.this,"Fail to create user.",Toast.LENGTH_SHORT).show();
 
                     }
                     @Override
                     public void onFailure(Call<User> call, Throwable t) {
-                        Toast.makeText(RegisterActivity.this,"Failed to sign up",Toast.LENGTH_LONG).show();
+                        Toast.makeText(RegisterActivity.this,"Failed to connect sever",Toast.LENGTH_LONG).show();
 
                     }
                 });

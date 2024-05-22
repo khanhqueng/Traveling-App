@@ -1,48 +1,85 @@
 package com.example.uddd.Models;
 
-public class User {
-    private int id;
-    private String Hoten;
-    private String Email;
-    private String Password;
+import java.io.Serializable;
 
+public class User implements Serializable {
+    private int userID;
+    private String name;
+    private String dob;
+    private String email;
+    private String password;
+    private String avatar;
+    private int totalComment;
+    private float reliability;
 
-    public User(int Id, String hoten, String email, String password) {
-        id = Id;
-        Hoten = hoten;
-        Email = email;
-        Password = password;
+    public User(String name, String dob, String email, String password) {
+        this.name = name;
+        this.dob = dob;
+        this.email = email;
+        this.password = password;
     }
 
-    public int getId() {
-        return id;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setId(int id) {
-        this.id= id;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
-    public String getHoten() {
-        return Hoten;
+    public String getName() {
+        return name;
     }
 
-    public void setHoten(String hoten) {
-        Hoten = hoten;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
+        this.password = password;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public int getTotalComment() {
+        return totalComment;
+    }
+
+    public void setTotalComment(int totalComment) {
+        this.totalComment = totalComment;
+    }
+
+    public float getReliability() {
+        return reliability;
+    }
+
+    public void setReliability(float reliability) {
+        this.reliability = reliability;
     }
 }

@@ -2,6 +2,7 @@ package com.example.uddd.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,11 +21,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.uddd.API.RetrofitClient;
 import com.example.uddd.API.RetrofitMapbox;
 import com.example.uddd.Adapters.PopularAdapter;
 import com.example.uddd.Adapters.ResultAdapter;
 import com.example.uddd.Domains.PopularDomain;
 import com.example.uddd.Models.PlacesInfo;
+import com.example.uddd.Models.User;
 import com.example.uddd.R;
 import com.mapbox.search.autocomplete.PlaceAutocomplete;
 import com.mapbox.search.autocomplete.PlaceAutocompleteSuggestion;
@@ -43,13 +48,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
+    private User user;
     private EditText searchBar;
     private SearchResultsView searchResultsView;
     private PlaceAutocompleteUiAdapter placeAutocompleteUiAdapter;
     private boolean ignoreNextQueryUpdate = false;
-    private RecyclerView recyclerView;
-    private ResultAdapter popularAdapter;
-    private PopularAdapter recommendAdapter;
+    private static RecyclerView recommendRecyclerView, popularRecyclerView;
+    private ImageView avatar;
+    private static PopularAdapter recommendAdapter;
+    private static ResultAdapter popularAdapter;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,15 +67,25 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.home_page, container, false);
 
+        user = MainActivity.getUser();
+        avatar = view.findViewById(R.id.imv_avatar);
+
+        String avatarDb;
+        if(user == null || user.getAvatar().equals("none"))
+            avatarDb = getString(R.string.basicAvatar);
+        else
+            avatarDb = user.getAvatar();
+
+        Uri avatarUri = Uri.parse(avatarDb);
+        Glide.with(this).load(avatarUri).into(avatar);
+
         intiLocationInfo();
 
-        recyclerView = view.findViewById(R.id.view_recommend);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
-        recyclerView.setAdapter(recommendAdapter);
+        recommendRecyclerView = view.findViewById(R.id.view_recommend);
+        recommendRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
 
-        recyclerView = view.findViewById(R.id.view_popular);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
-        recyclerView.setAdapter(popularAdapter);
+        popularRecyclerView = view.findViewById(R.id.view_popular);
+        popularRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
 
         searchBar = view.findViewById(R.id.search_bar);
         PlaceAutocomplete placeAutocomplete = PlaceAutocomplete.create();
@@ -76,6 +93,7 @@ public class HomeFragment extends Fragment {
 
         searchResultsView.initialize(new SearchResultsView.Configuration(new CommonSearchViewConfiguration()));
         placeAutocompleteUiAdapter = new PlaceAutocompleteUiAdapter(searchResultsView,placeAutocomplete);
+
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -121,9 +139,6 @@ public class HomeFragment extends Fragment {
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             if (searchBar.length() > 0 && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
             {
-                //Handle
-
-
                 confirmLocation();
                 return true; // Consume the event
             }
@@ -194,7 +209,6 @@ public class HomeFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), ResultActivity.class);
                     intent.putExtra("location",location);
                     startActivity(intent);
-
                 }
             }
             @Override
@@ -204,15 +218,60 @@ public class HomeFragment extends Fragment {
         });
 
     }
-    public void intiLocationInfo()
+    static void intiLocationInfo()
     {
-        ArrayList<PopularDomain> items = new ArrayList<>();
-        items.add(new PopularDomain("Nha Trang Beach","Nha Trang","Beautiful beach","popular_pic",3.9f));
-        items.add(new PopularDomain("Hue Capital","Hue","Vũng Tàu is a port city and the capital of Bà Rịa-Vũng Tàu Province, on a peninsula in southern Vietnam. Once a French colonial town, it’s now a popular seaside resort that draws many visitors from Ho Chi Minh City, who arrive by hydrofoil. Its long, busy stretch of sandy coast, including Front Beach and Pineapple Beach, has the verdant Small Mountain and Big Mountain as backdrop.","hue",3.5f));
-        items.add(new PopularDomain("Ha Long Bay","Quang Ninh","Beautiful beach","vhl",4.0f));
+        Call<ArrayList<PopularDomain>> call = RetrofitClient.getInstance().getAPI().getRecommend();
+        call.enqueue(new Callback<ArrayList<PopularDomain>>() {
+            @Override
+            public void onResponse(Call<ArrayList<PopularDomain>> call, Response<ArrayList<PopularDomain>> response) {
 
-        popularAdapter = new ResultAdapter(items);
-        recommendAdapter = new PopularAdapter(items);
+                if(response.body() != null )
+                {
+                   //Toast.makeText(getContext(),"Load complete",Toast.LENGTH_SHORT).show();
+                    recommendAdapter = new PopularAdapter(response.body());
+                    recommendRecyclerView.setAdapter(recommendAdapter);
+                }
+                //Toast.makeText(getContext(),"Fail to respond",Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onFailure(Call<ArrayList<PopularDomain>> call, Throwable t) {
+                //Toast.makeText(getContext(),"Fail to connect server.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        Call<ArrayList<PopularDomain>> call2 = RetrofitClient.getInstance().getAPI().getPopular();
+        call2.enqueue(new Callback<ArrayList<PopularDomain>>() {
+            @Override
+            public void onResponse(Call<ArrayList<PopularDomain>> call, Response<ArrayList<PopularDomain>> response) {
+
+                if(response.body() != null )
+                {
+                    //Toast.makeText(getContext(),"Load complete",Toast.LENGTH_SHORT).show();
+                    popularAdapter = new ResultAdapter(response.body());
+                    popularRecyclerView.setAdapter(popularAdapter);
+                }
+            }
+            @Override
+            public void onFailure(Call<ArrayList<PopularDomain>> call, Throwable t) {
+                //Toast.makeText(getContext(),"Fail to connect server.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
+    void UpdateLocationInfo()
+    {
+        Call<ArrayList<PopularDomain>> call = RetrofitClient.getInstance().getAPI().getRecommend();
+        call.enqueue(new Callback<ArrayList<PopularDomain>>() {
+            @Override
+            public void onResponse(Call<ArrayList<PopularDomain>> call, Response<ArrayList<PopularDomain>> response) {
+                if(response.body()!=null)
+                    recommendAdapter = new PopularAdapter(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<PopularDomain>> call, Throwable t) {
+                Toast.makeText(getContext(),"Fail to connect server.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

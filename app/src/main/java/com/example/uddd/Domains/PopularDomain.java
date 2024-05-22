@@ -1,28 +1,39 @@
 package com.example.uddd.Domains;
 import java.io.Serializable;
 public class PopularDomain implements Serializable {
-    private String title;
-    private String location;
+    private int locationID;
+    private String photo;
+    private String type;
+    private String name;
+    private String address;
+    private float avgStar;
+    private int totalComment;
     private String description;
-    private String pic;
-    private float score;
-
-    public String getTitle() {
-        return title;
+    public PopularDomain(int locationID, String photo, String type, String name, String address, float avgStar, int totalComment, String description) {
+        this.locationID = locationID;
+        this.photo = photo;
+        this.type = type;
+        this.name = name;
+        this.address = address;
+        this.avgStar = avgStar;
+        this.totalComment = totalComment;
+        this.description = description;
+    }
+    public int getLocationID() {
+        return locationID;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setLocationID(int locationID) {
+        this.locationID = locationID;
     }
 
-    public String getLocation() {
-        return location;
+    public String getType() {
+        return type;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setType(String type) {
+        this.type = type;
     }
-
     public String getDescription() {
         return description;
     }
@@ -31,28 +42,42 @@ public class PopularDomain implements Serializable {
         this.description = description;
     }
 
-    public String getPic() {
-        return pic;
+    public int getTotalComment() {
+        return totalComment;
     }
 
-    public void setPic(String pic) {
-        this.pic = pic;
+    public void setTotalComment(int totalComment) {
+        this.totalComment = totalComment;
+    }
+    public String getPhoto() {
+        return photo;
     }
 
-    public PopularDomain(String title, String location, String description, String pic, float score)
-    {
-        this.title=title;
-        this.location=location;
-        this.description=description;
-        this.pic=pic;
-        this.score = score;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
-    public float getScore() {
-        return score;
+    public String getName() {
+        return name;
     }
 
-    public void setScore(float score) {
-        this.score = score;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public float getAvgStar() {
+        return avgStar;
+    }
+
+    public void setAvgStar(float avgStar) {
+        this.avgStar = avgStar;
     }
 }

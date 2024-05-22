@@ -8,15 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.provider.MediaStore;
-import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,15 +18,35 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
+import com.example.uddd.API.RetrofitClient;
+import com.example.uddd.Models.User;
 import com.example.uddd.R;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ProfileFragment extends Fragment {
     private static final int PICK_IMAGE_REQUEST_CODE = 1;
     private static final int REQUEST_PERMISSION_CODE = 2;
-    private ImageButton changeAvatarButton, changeNameButton,changeDobButton,changeEmailButton;
+    private ImageButton changeAvatarButton, changeNameButton,changeDobButton;
     private EditText nameBar,dobBar,emailBar;
     private ImageView avatar;
-
+    private User user;
+    private TextView totalComment, reliability;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,16 +58,30 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.profile_page, container, false);
 
+        user = MainActivity.getUser();
+
         avatar = view.findViewById(R.id.imv_avatar);
+        totalComment = view.findViewById(R.id.tv_comment);
+        reliability  = view.findViewById(R.id.tv_reliability);
 
         changeAvatarButton = view.findViewById(R.id.btn_change_avatar);
         changeNameButton = view.findViewById(R.id.btn_change_name);
         changeDobButton = view.findViewById(R.id.btn_change_dob);
-        changeEmailButton = view.findViewById(R.id.btn_change_email);
 
         nameBar = view.findViewById(R.id.name_bar);
         dobBar = view.findViewById(R.id.dob_bar);
         emailBar = view.findViewById(R.id.email_bar);
+
+        nameBar.setText(user.getName());
+        dobBar.setText(user.getDob());
+        emailBar.setText(user.getEmail());
+        totalComment.setText(String.valueOf(user.getTotalComment()));
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        String roundedValue = df.format(user.getReliability()*100);
+        reliability.setText(roundedValue+"%");
+        Uri imageUri = Uri.parse(user.getAvatar());
+        Glide.with(this).load(imageUri).into(avatar);
 
         changeNameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +98,41 @@ public class ProfileFragment extends Fragment {
                     InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                     inputMethodManager.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
 
-                    confirmChangeDialog(nameBar);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Confirmation")
+                            .setMessage("Save changes?")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    nameBar.setEnabled(false);
+                                    dialog.dismiss();
+
+                                    //Update to database
+                                    Call<Void> call = RetrofitClient.getInstance().getAPI().editName(user.getUserID(),nameBar.getText().toString());
+                                    call.enqueue(new Callback<Void>() {
+                                        @Override
+                                        public void onResponse(Call<Void> call, Response<Void> response) {
+                                            Toast.makeText(getContext(),"Update successful.",Toast.LENGTH_LONG).show();
+
+                                            //Update local
+                                            MainActivity.UpdateUser();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Void> call, Throwable t) {
+                                            Toast.makeText(getContext(),t.toString(),Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                     return true;
                 }
                 return false;
@@ -87,49 +147,26 @@ public class ProfileFragment extends Fragment {
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         month++;
                         dobBar.setText(dayOfMonth+"/"+month+"/"+year);
-                        confirmChangeDialog(dobBar);
+
+                        //Update to database
+                        Call<Void> call = RetrofitClient.getInstance().getAPI().editDob(user.getUserID(),dobBar.getText().toString());
+                        call.enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                Toast.makeText(getContext(),"Update successful.",Toast.LENGTH_LONG).show();
+                                //Update local
+                                MainActivity.UpdateUser();
+                            }
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                Toast.makeText(getContext(),"Update Fail",Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
                 });
                 datePickerDialog.show();
             }
         });
-        changeEmailButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                emailBar.setEnabled(true);
-            }
-        });
-        emailBar.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if(event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)
-                {
-                    // Hide the keyboard
-                    InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
-
-                    if(Patterns.EMAIL_ADDRESS.matcher(emailBar.getText()).matches())
-                        confirmChangeDialog(emailBar);
-                    else
-                    {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                        builder.setTitle("Error")
-                                .setMessage("Invalid email.")
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
-
         changeAvatarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,7 +216,25 @@ public class ProfileFragment extends Fragment {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        avatar.setImageURI(imageUri);
+                        Glide.with(getContext()).load(imageUri).into(avatar);
+
+                        //Update to database
+                        Call<Void> call = RetrofitClient.getInstance().getAPI().editAvatar(user.getUserID(),Uri.decode(imageUri.toString()));
+                        call.enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                Toast.makeText(getContext(),"Update successful.",Toast.LENGTH_LONG).show();
+
+                                //Update local
+                                MainActivity.UpdateUser();
+                            }
+
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                                Toast.makeText(getContext(),"Update fail.",Toast.LENGTH_LONG).show();
+                            }
+                        });
+
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -194,25 +249,4 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    public void confirmChangeDialog(EditText contentBar)
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Confirmation")
-                .setMessage("Save changes?")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        contentBar.setEnabled(false);
-                        dialog.dismiss();
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
 }

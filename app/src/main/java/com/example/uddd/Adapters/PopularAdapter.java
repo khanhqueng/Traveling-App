@@ -20,6 +20,8 @@ import com.example.uddd.Activities.DetailActivity;
 import com.example.uddd.Domains.PopularDomain;
 import com.example.uddd.R;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHolder> {
@@ -37,11 +39,13 @@ public class PopularAdapter extends RecyclerView.Adapter<PopularAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.titleTxt.setText(items.get(position).getTitle());
-        holder.locationTxt.setText(items.get(position).getLocation());
-        holder.scoreTxt.setText(Float.toString(items.get(position).getScore()));
-
-        int drawableResId = holder.itemView.getResources().getIdentifier(items.get(position).getPic(), "drawable", holder.itemView.getContext().getPackageName());
+        holder.titleTxt.setText(items.get(position).getName());
+        holder.locationTxt.setText(items.get(position).getAddress());
+        DecimalFormat df = new DecimalFormat("#.#");
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        String roundedValue = df.format(items.get(position).getAvgStar());
+        holder.scoreTxt.setText(roundedValue);
+        int drawableResId = holder.itemView.getResources().getIdentifier(items.get(position).getPhoto(), "drawable", holder.itemView.getContext().getPackageName());
         Glide.with(holder.itemView.getContext())
                 .load(drawableResId)
                 .transform(new CenterCrop(), new GranularRoundedCorners(30, 30 , 30, 30))

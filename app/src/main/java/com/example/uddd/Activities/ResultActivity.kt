@@ -27,7 +27,6 @@ import com.example.uddd.R
 import com.mapbox.android.gestures.MoveGestureDetector
 import com.mapbox.geojson.Point
 import com.mapbox.maps.CameraOptions
-
 import com.mapbox.maps.ImageHolder
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
@@ -59,6 +58,7 @@ class ResultActivity : AppCompatActivity()
     var layIDD="Map_annotation"
     var pointAnnotationManager : PointAnnotationManager?=null
     var markerlist:ArrayList<PointAnnotationOptions> = ArrayList();
+    val nameCategoryList = arrayListOf<String>("coffee", "food_and_drink","shopping","hotel","restaurant","restaurant")
 
     private var searchLocation: String? = null
     private var Map: MapView?= null
@@ -115,51 +115,6 @@ class ResultActivity : AppCompatActivity()
         Map = findViewById(R.id.mapView)
 
         filters = ArrayList()
-        for (i in 0..5) {
-            val filterId = getResources().getIdentifier("filter" + (i + 1), "id", packageName)
-            val button = findViewById<ToggleButton>(filterId)
-            button.setOnCheckedChangeListener { buttonView, isChecked ->
-                //Separate later for each filter
-                if (isChecked) {
-                    button.setBackgroundDrawable(getDrawable(R.drawable.gradient_green_button))
-
-                    val key = getString(R.string.Mapbox_key)
-                    val call =
-                        RetrofitMapbox.getInstance().api.GetNearby(key, "en", 10, searchLocation)
-                    call.enqueue(object : Callback<PlacesInfo?> {
-                        override fun onResponse(call: Call<PlacesInfo?>, response: Response<PlacesInfo?>) {
-                            val info = response.body()
-                            annotationapi= Map?.annotations
-                            annotationConfig= AnnotationConfig(
-                                layerId = layIDD
-                            )
-                            pointAnnotationManager = annotationapi?.createPointAnnotationManager(annotationConfig);
-                            for (i in info!!.features.indices) {
-                                val longitude = info.features[i].properties.coordinates.longitude
-                                val latitude = info.features[i].properties.coordinates.latitude
-
-                                val bitmap = convertDrawToBitmap(AppCompatResources.getDrawable(this@ResultActivity,R.drawable.baseline_location_on_24))
-                                val pointAnnotationOptions:PointAnnotationOptions=PointAnnotationOptions().withPoint(
-                                    Point.fromLngLat(longitude, latitude)).withIconImage(bitmap)
-                                markerlist.add(pointAnnotationOptions)
-
-
-                            }
-                            pointAnnotationManager?.create(markerlist);
-
-                        }
-
-                        override fun onFailure(call: Call<PlacesInfo?>, t: Throwable) {
-                            Toast.makeText(this@ResultActivity, t.message, Toast.LENGTH_SHORT).show()
-                        }
-                    })
-                }
-                else
-                    button.setBackgroundDrawable(getDrawable(R.drawable.outline_shape))
-            }
-            filters.add(button)
-        }
-
         if (ActivityCompat.checkSelfPermission(
                 this@ResultActivity,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -185,6 +140,319 @@ class ResultActivity : AppCompatActivity()
                 Map!!.gestures.addOnMoveListener(onMoveListener)
             }
         })
+        annotationapi= Map?.annotations
+        annotationConfig= AnnotationConfig(
+            layerId = layIDD
+        )
+        pointAnnotationManager = annotationapi?.createPointAnnotationManager(annotationConfig);
+        val bitmap = convertDrawToBitmap(
+            AppCompatResources.getDrawable(
+                this@ResultActivity,
+                R.drawable.baseline_location_on_24
+            )
+        )
+        for (i in 0..5) {
+            val filterId = getResources().getIdentifier("filter" + (i + 1), "id", packageName)
+            val button = findViewById<ToggleButton>(filterId)
+            when (nameCategoryList[i]){
+                "coffee"-> {
+                    Toast.makeText(this@ResultActivity, "hello", Toast.LENGTH_SHORT).show()
+                    button.setOnCheckedChangeListener { buttonView, isChecked ->
+                        if (isChecked) {
+                            button.setBackgroundDrawable(getDrawable(R.drawable.gradient_green_button))
+                            val key = getString(R.string.Mapbox_key)
+                            val call =
+                                RetrofitMapbox.getInstance().api.GetNearbyCoffee(
+                                    key,
+                                    "en",
+                                    10,
+                                    "106.7004,10.7757"
+                                )
+
+                            call.enqueue(object : Callback<PlacesInfo?> {
+                                override fun onResponse(
+                                    call: Call<PlacesInfo?>, response: Response<PlacesInfo?>) {
+                                    val info = response.body()
+                                    var string: String = ""
+
+                                    for (i in info!!.features.indices) {
+                                        val longitude =
+                                            info.features[i].properties.coordinates.longitude
+                                        val latitude =
+                                            info.features[i].properties.coordinates.latitude
+                                        string += longitude.toString() + "," + latitude.toString()
+
+
+
+                                        val pointAnnotationOptions: PointAnnotationOptions =
+                                            PointAnnotationOptions().withPoint(
+                                                Point.fromLngLat(longitude, latitude)
+                                            ).withIconImage(bitmap)
+                                        markerlist.add(pointAnnotationOptions)
+
+
+                                    }
+
+                                    pointAnnotationManager?.create(markerlist);
+
+
+                                }
+
+                                override fun onFailure(call: Call<PlacesInfo?>, t: Throwable) {
+                                    Toast.makeText(
+                                        this@ResultActivity,
+                                        t.message,
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                }
+                            })
+                        }
+
+
+                        else
+                            button.setBackgroundDrawable(getDrawable(R.drawable.outline_shape))
+                    }
+
+                }
+                "food_and_drink"-> {
+                    button.setOnCheckedChangeListener { buttonView, isChecked ->
+                        if (isChecked) {
+                            button.setBackgroundDrawable(getDrawable(R.drawable.gradient_green_button))
+                            val key = getString(R.string.Mapbox_key)
+                            val call =
+                                RetrofitMapbox.getInstance().api.GetNearbyFoodAndDrink(
+                                    key,
+                                    "en",
+                                    10,
+                                    "106.7004,10.7757"
+                                )
+
+                            call.enqueue(object : Callback<PlacesInfo?> {
+                                override fun onResponse(
+                                    call: Call<PlacesInfo?>, response: Response<PlacesInfo?>) {
+                                    val info = response.body()
+                                    var string: String = ""
+
+                                    for (i in info!!.features.indices) {
+                                        val longitude =
+                                            info.features[i].properties.coordinates.longitude
+                                        val latitude =
+                                            info.features[i].properties.coordinates.latitude
+                                        string += longitude.toString() + "," + latitude.toString()
+
+                                        val pointAnnotationOptions: PointAnnotationOptions =
+                                            PointAnnotationOptions().withPoint(
+                                                Point.fromLngLat(longitude, latitude)
+                                            ).withIconImage(bitmap)
+                                        markerlist.add(pointAnnotationOptions)
+
+
+                                    }
+                                    Toast.makeText(this@ResultActivity, "hello", Toast.LENGTH_SHORT).show()
+                                    pointAnnotationManager?.create(markerlist);
+
+
+                                }
+
+                                override fun onFailure(call: Call<PlacesInfo?>, t: Throwable) {
+                                    Toast.makeText(
+                                        this@ResultActivity,
+                                        t.message,
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                }
+                            })
+                        }
+
+
+                        else
+                            button.setBackgroundDrawable(getDrawable(R.drawable.outline_shape))
+                    }
+
+                }
+                "shopping"-> {
+                    button.setOnCheckedChangeListener { buttonView, isChecked ->
+                        if (isChecked) {
+                            button.setBackgroundDrawable(getDrawable(R.drawable.gradient_green_button))
+                            val key = getString(R.string.Mapbox_key)
+                            val call =
+                                RetrofitMapbox.getInstance().api.GetNearbyShop(
+                                    key,
+                                    "en",
+                                    10,
+                                    "106.7004,10.7757"
+                                )
+
+                            call.enqueue(object : Callback<PlacesInfo?> {
+                                override fun onResponse(
+                                    call: Call<PlacesInfo?>, response: Response<PlacesInfo?>) {
+                                    val info = response.body()
+                                    var string: String = ""
+
+                                    for (i in info!!.features.indices) {
+                                        val longitude =
+                                            info.features[i].properties.coordinates.longitude
+                                        val latitude =
+                                            info.features[i].properties.coordinates.latitude
+                                        string += longitude.toString() + "," + latitude.toString()
+
+
+
+                                        val pointAnnotationOptions: PointAnnotationOptions =
+                                            PointAnnotationOptions().withPoint(
+                                                Point.fromLngLat(longitude, latitude)
+                                            ).withIconImage(bitmap)
+                                        markerlist.add(pointAnnotationOptions)
+
+
+                                    }
+                                    Toast.makeText(this@ResultActivity, "hello", Toast.LENGTH_SHORT).show()
+                                    pointAnnotationManager?.create(markerlist);
+
+
+                                }
+
+                                override fun onFailure(call: Call<PlacesInfo?>, t: Throwable) {
+                                    Toast.makeText(
+                                        this@ResultActivity,
+                                        t.message,
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                }
+                            })
+                        }
+
+
+                        else
+                            button.setBackgroundDrawable(getDrawable(R.drawable.outline_shape))
+                    }
+
+                }
+                "hotel"-> {
+                    button.setOnCheckedChangeListener { buttonView, isChecked ->
+                        if (isChecked) {
+                            button.setBackgroundDrawable(getDrawable(R.drawable.gradient_green_button))
+                            val key = getString(R.string.Mapbox_key)
+                            val call =
+                                RetrofitMapbox.getInstance().api.GetNearbyHotel(
+                                    key,
+                                    "en",
+                                    10,
+                                    "106.7004,10.7757"
+                                )
+
+                            call.enqueue(object : Callback<PlacesInfo?> {
+                                override fun onResponse(
+                                    call: Call<PlacesInfo?>, response: Response<PlacesInfo?>) {
+                                    val info = response.body()
+                                    var string: String = ""
+
+                                    for (i in info!!.features.indices) {
+                                        val longitude =
+                                            info.features[i].properties.coordinates.longitude
+                                        val latitude =
+                                            info.features[i].properties.coordinates.latitude
+                                        string += longitude.toString() + "," + latitude.toString()
+
+
+
+                                        val pointAnnotationOptions: PointAnnotationOptions =
+                                            PointAnnotationOptions().withPoint(
+                                                Point.fromLngLat(longitude, latitude)
+                                            ).withIconImage(bitmap)
+                                        markerlist.add(pointAnnotationOptions)
+
+
+                                    }
+                                    Toast.makeText(this@ResultActivity, "hello", Toast.LENGTH_SHORT).show()
+                                    pointAnnotationManager?.create(markerlist);
+
+
+                                }
+
+                                override fun onFailure(call: Call<PlacesInfo?>, t: Throwable) {
+                                    Toast.makeText(
+                                        this@ResultActivity,
+                                        t.message,
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                }
+                            })
+                        }
+
+
+                        else
+                            button.setBackgroundDrawable(getDrawable(R.drawable.outline_shape))
+                    }
+
+                }
+                "restaurant"-> {
+                    button.setOnCheckedChangeListener { buttonView, isChecked ->
+                        if (isChecked) {
+                            button.setBackgroundDrawable(getDrawable(R.drawable.gradient_green_button))
+                            val key = getString(R.string.Mapbox_key)
+                            val call =
+                                RetrofitMapbox.getInstance().api.GetNearbyRestaurant(
+                                    key,
+                                    "en",
+                                    10,
+                                    "106.7004,10.7757"
+                                )
+
+                            call.enqueue(object : Callback<PlacesInfo?> {
+                                override fun onResponse(
+                                    call: Call<PlacesInfo?>, response: Response<PlacesInfo?>) {
+                                    val info = response.body()
+                                    var string: String = ""
+
+                                    for (i in info!!.features.indices) {
+                                        val longitude =
+                                            info.features[i].properties.coordinates.longitude
+                                        val latitude =
+                                            info.features[i].properties.coordinates.latitude
+                                        string += longitude.toString() + "," + latitude.toString()
+
+
+
+                                        val pointAnnotationOptions: PointAnnotationOptions =
+                                            PointAnnotationOptions().withPoint(
+                                                Point.fromLngLat(longitude, latitude)
+                                            ).withIconImage(bitmap)
+                                        markerlist.add(pointAnnotationOptions)
+
+
+                                    }
+                                    Toast.makeText(this@ResultActivity, "hello", Toast.LENGTH_SHORT).show()
+                                    pointAnnotationManager?.create(markerlist);
+
+
+                                }
+
+                                override fun onFailure(call: Call<PlacesInfo?>, t: Throwable) {
+                                    Toast.makeText(
+                                        this@ResultActivity,
+                                        t.message,
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                                }
+                            })
+                        }
+                        else
+                            button.setBackgroundDrawable(getDrawable(R.drawable.outline_shape))
+                    }
+
+                }
+            }
+
+            filters.add(button)
+        }
+
+
     }
     private fun convertDrawToBitmap(sourceDrawable :Drawable?): Bitmap{
 
@@ -222,9 +490,9 @@ class ResultActivity : AppCompatActivity()
         get() {
             searchLocation = intent.getStringExtra("location")
             val items = ArrayList<PopularDomain>()
-            items.add(PopularDomain("Nha Trang Beach", "Nha Trang", "Beautiful beach", "popular_pic", 3.9f))
-            items.add(PopularDomain("Hue Capital", "Hue", "Beautiful beach", "hue", 3.5f))
-            items.add(PopularDomain("Ha Long Bay", "Quang Ninh", "Beautiful beach", "vhl", 4.0f))
+            //items.add(PopularDomain("Nha Trang Beach", "Nha Trang", "Beautiful beach", "popular_pic", 3.9f))
+            //items.add(PopularDomain("Hue Capital", "Hue", "Beautiful beach", "hue", 3.5f))
+            //items.add(PopularDomain("Ha Long Bay", "Quang Ninh", "Beautiful beach", "vhl", 4.0f))
             resultAdapter = ResultAdapter(items)
         }
 }

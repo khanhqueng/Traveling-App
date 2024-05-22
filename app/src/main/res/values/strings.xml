@@ -12,4 +12,5 @@
     <string name="Mapbox_key">pk.eyJ1Ijoic2VhcmNoLW1hY2hpbmUtdXNlci0xIiwiYSI6ImNrNnJ6bDdzdzA5cnAza3F4aTVwcWxqdWEifQ.RFF7CVFKrUsZVrJsFzhRvQ</string>
     <string name="API_key">AIzaSyBMO8xHl-IaDikDQJ47xbTHsVpzDOJMFP4</string>
     <string name="mapbox_access_token" translatable="false">pk.eyJ1Ijoibmd1eWV0bHVuMTE1IiwiYSI6ImNsdzNzdHUzbzB4MjMybnF6ZG1vZHRiZ2wifQ.7fe6wqihyj7UumXdU1dUWQ</string>
+    <string name="basicAvatar">https://e7.pngegg.com/pngimages/848/196/png-clipart-business-google-account-organization-service-avatar-angle-heroes.png</string>
 </resources>

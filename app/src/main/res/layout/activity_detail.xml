@@ -32,7 +32,7 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/popular_pic" />
+                    app:srcCompat="@drawable/pic1" />
 
                 <ImageButton
                     android:id="@+id/btn_back"
@@ -81,10 +81,10 @@
 
                 <TextView
                     android:id="@+id/locationTxt"
-                    android:layout_width="227dp"
-                    android:layout_height="45dp"
+                    android:layout_width="240dp"
+                    android:layout_height="50dp"
                     android:layout_marginStart="44dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="12dp"
                     android:text="location"
                     android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"

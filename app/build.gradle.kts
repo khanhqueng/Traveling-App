@@ -57,6 +57,7 @@ dependencies {
     implementation("com.mapbox.search:place-autocomplete:2.0.0")
     implementation("com.mapbox.search:mapbox-search-android-ui:2.0.0")
     implementation("com.mapbox.maps:android:11.3.1")
+    implementation ("androidx.fragment:fragment:1.3.0'")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
