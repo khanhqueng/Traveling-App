@@ -206,7 +206,7 @@ public class HomeFragment extends Fragment {
                     String location = coord.getLongitude()+","+coord.getLatitude();
 
                     // Change to result activity
-                    Intent intent = new Intent(getActivity(), ResultActivity.class);
+                    Intent intent = new Intent(getContext(), ResultActivity.class);
                     intent.putExtra("location",location);
                     startActivity(intent);
                 }
