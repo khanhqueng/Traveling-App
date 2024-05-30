@@ -20,6 +20,7 @@ import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.uddd.API.RetrofitClient
 import com.example.uddd.API.RetrofitMapbox
 import com.example.uddd.Adapters.ResultAdapter
 import com.example.uddd.Domains.PopularDomain
@@ -273,6 +274,7 @@ class ResultActivity : AppCompatActivity()
                     button.setOnCheckedChangeListener { buttonView, isChecked ->
                         if (isChecked) {
                             button.setBackgroundDrawable(getDrawable(R.drawable.gradient_green_button))
+                            initShoppingResult()
                             val key = getString(R.string.Mapbox_key)
                             val call =
                                 RetrofitMapbox.getInstance().api.GetNearbyShop(
@@ -368,7 +370,7 @@ class ResultActivity : AppCompatActivity()
 
 
                                     }
-                                    Toast.makeText(this@ResultActivity, "Get Success", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this@ResultActivity, "hello", Toast.LENGTH_SHORT).show()
                                     pointAnnotationManager?.create(markerlist);
 
 
@@ -429,7 +431,7 @@ class ResultActivity : AppCompatActivity()
 
 
                                     }
-                                    Toast.makeText(this@ResultActivity, "Get Success", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this@ResultActivity, "hello", Toast.LENGTH_SHORT).show()
                                     pointAnnotationManager?.create(markerlist);
 
 
@@ -495,17 +497,55 @@ class ResultActivity : AppCompatActivity()
         val dividerItemDecoration =
             DividerItemDecoration(recyclerView.getContext(), LinearLayoutManager.VERTICAL)
         recyclerView.addItemDecoration(dividerItemDecoration)
-        recyclerView.setAdapter(resultAdapter)
-
     }
     val resultInfo: Unit
         get() {
             var extras: Bundle? = intent.extras;
             searchLocation = extras?.getString("location")
-            val items = ArrayList<PopularDomain>()
-            //items.add(PopularDomain("Nha Trang Beach", "Nha Trang", "Beautiful beach", "popular_pic", 3.9f))
-            //items.add(PopularDomain("Hue Capital", "Hue", "Beautiful beach", "hue", 3.5f))
-            //items.add(PopularDomain("Ha Long Bay", "Quang Ninh", "Beautiful beach", "vhl", 4.0f))
-            resultAdapter = ResultAdapter(items)
         }
+    private fun initShoppingResult() {
+        val call =
+            RetrofitClient.getInstance().api.vungTauShop
+        call.enqueue(object : Callback<ArrayList<PopularDomain>?> {
+            override fun onResponse(
+                call: Call<ArrayList<PopularDomain>?>,
+                response: Response<ArrayList<PopularDomain>?>
+            ) {
+                if (response.body() != null) {
+                    resultAdapter = ResultAdapter(response.body())
+                    recyclerView.adapter = resultAdapter
+                }
+
+            }
+
+            override fun onFailure(call: Call<ArrayList<PopularDomain>?>, t: Throwable) {
+                Toast.makeText(this@ResultActivity, "Fail to connect to server", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+    }
+
+    private fun initFoodResult() {
+        val call =
+            RetrofitClient.getInstance().api.vungTauFood
+        call.enqueue(object : Callback<ArrayList<PopularDomain>?> {
+            override fun onResponse(
+                call: Call<ArrayList<PopularDomain>?>,
+                response: Response<ArrayList<PopularDomain>?>
+            ) {
+                if (response.body() != null) {
+                    resultAdapter = ResultAdapter(response.body())
+                    recyclerView.adapter = resultAdapter
+                }
+
+            }
+
+            override fun onFailure(call: Call<ArrayList<PopularDomain>?>, t: Throwable) {
+                Toast.makeText(this@ResultActivity, "Fail to connect to server", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        })
+    }
+
+
 }

@@ -17,18 +17,24 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.uddd.API.RetrofitClient;
 import com.example.uddd.Adapters.PopularAdapter;
 import com.example.uddd.Adapters.SavedAdapter;
 import com.example.uddd.Domains.PopularDomain;
 import com.example.uddd.Domains.SavedDomain;
+import com.example.uddd.Models.User;
 import com.example.uddd.R;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class FavouriteFragment extends Fragment {
-    PopularAdapter favouriteAdapter;
-    SavedAdapter savedLocationAdapter;
-    RecyclerView recyclerView;
+    static PopularAdapter favouriteAdapter;
+    static SavedAdapter savedLocationAdapter;
+    static RecyclerView favourRecyclerView, savedRecyclerView;
     ImageButton addButton;
 
     @Override
@@ -37,18 +43,15 @@ public class FavouriteFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.favourite_page, container, false);
 
-        initFavouriteLocation();
-        initSavedLocation();
-
         addButton = view.findViewById(R.id.btn_add_location);
 
-        recyclerView = view.findViewById(R.id.view_fav);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
-        recyclerView.setAdapter(favouriteAdapter);
+        favourRecyclerView = view.findViewById(R.id.view_fav);
+        favourRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
+        initFavouriteLocation();
 
-        recyclerView = view.findViewById(R.id.view_saved);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
-        recyclerView.setAdapter(savedLocationAdapter);
+        savedRecyclerView = view.findViewById(R.id.view_saved);
+        savedRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
+        initSavedLocation();
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,9 +82,22 @@ public class FavouriteFragment extends Fragment {
                         String location = locationBar.getText().toString();
 
                         if(checkInputInformation(location)) {
-                            SavedDomain item = new SavedDomain(locationName, location);
-                            savedLocationAdapter.addItem(item);
                             dialog.dismiss();
+
+                            //Update to database
+                            Call<Void> call = RetrofitClient.getInstance().getAPI().addSaved(MainActivity.getUser().getUserID(),locationName,location);
+                            call.enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(Call<Void> call, Response<Void> response) {
+                                    SavedDomain item = new SavedDomain(1,locationName, location);
+                                    savedLocationAdapter.addItem(item);
+                                }
+
+                                @Override
+                                public void onFailure(Call<Void> call, Throwable t) {
+
+                                }
+                            });
                         }
                         else
                             showErrorMessage();
@@ -115,20 +131,47 @@ public class FavouriteFragment extends Fragment {
         dialog.show();
     }
 
-    void initFavouriteLocation()
+    public static void initFavouriteLocation()
     {
-        ArrayList<PopularDomain> items = new ArrayList<>();
-        //items.add(new PopularDomain("Nha Trang Beach","Nha Trang","Beautiful beach","popular_pic",3.9f));
-        //items.add(new PopularDomain("Hue Capital","Hue","Beautiful beach","hue",3.5f));
-        //items.add(new PopularDomain("Ha Long Bay","Quang Ninh","Beautiful beach","vhl",4.0f));
-        favouriteAdapter = new PopularAdapter(items);
+        Call<ArrayList<PopularDomain>> call = RetrofitClient.getInstance().getAPI().getFavour(MainActivity.getUser().getUserID());
+        call.enqueue(new Callback<ArrayList<PopularDomain>>() {
+            @Override
+            public void onResponse(Call<ArrayList<PopularDomain>> call, Response<ArrayList<PopularDomain>> response) {
+                if(response.body()!=null)
+                {
+                    favouriteAdapter = new PopularAdapter(response.body());
+                    favourRecyclerView.setAdapter(favouriteAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<PopularDomain>> call, Throwable t) {
+                //Toast.makeText(this,t.toString(),Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
-    void initSavedLocation()
+    public void initSavedLocation()
     {
-        ArrayList<SavedDomain> items = new ArrayList<>();
-        items.add(new SavedDomain("Home","23A Tran Van Duat, district 3, HCM city"));
-        items.add(new SavedDomain("Work","90D Ho Van Loi, district 2, HCM city"));
-        savedLocationAdapter = new SavedAdapter(items);
+        User user = MainActivity.getUser();
+        if(user == null) return;
+        Call<ArrayList<SavedDomain>> call = RetrofitClient.getInstance().getAPI().getSavedLocation(user.getUserID());
+        call.enqueue(new Callback<ArrayList<SavedDomain>>() {
+            @Override
+            public void onResponse(Call<ArrayList<SavedDomain>> call, Response<ArrayList<SavedDomain>> response) {
+                if(response.body()!=null)
+                {
+                    savedLocationAdapter = new SavedAdapter(response.body());
+                    savedRecyclerView.setAdapter(savedLocationAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<SavedDomain>> call, Throwable t) {
+                //Toast.makeText(this,t.toString(),Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 
     @Override

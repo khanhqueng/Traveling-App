@@ -4,7 +4,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
-    private static final String URL="http://10.0.2.2:8090";
+    private static final String URL="https://newdeploy-ddok.onrender.com";
     private static RetrofitClient mInstance;
     private Retrofit retrofit;
     private RetrofitClient(){
